@@ -13,6 +13,7 @@ easy reuse across projects.
 - [Features](#features)
   - [`[ReadOnly]`](#readonly)
   - [`EnumDictionary<TEnum, TValue>`](#enumdictionarytenum-tvalue)
+  - [ScriptableObject "Open" Button](#scriptableobject-open-button)
   - [Update Panel](#update-panel)
 - [Contributing](#contributing)
 - [Versioning](#versioning)
@@ -114,6 +115,29 @@ foreach (var pair in weights)
 > or removing members at the end is safe; reordering or inserting a member
 > in the middle will shift the existing values, so double-check them in
 > the Inspector afterwards.
+
+### ScriptableObject "Open" Button
+
+Any serialized field referencing a `ScriptableObject` (or a subclass)
+automatically gets an "Open" button next to it in the Inspector:
+
+```csharp
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    public MyScriptableObject config;
+}
+```
+
+Clicking "Open" selects and pings the referenced asset, so its own
+Inspector shows up immediately — no need to go hunt for it in the Project
+window. The button is disabled when the field is empty.
+
+This applies automatically to every `ScriptableObject` field across your
+project (no attribute required). If one of your `ScriptableObject`
+subtypes already has its own `[CustomPropertyDrawer]`, that more specific
+drawer still takes priority, so nothing breaks.
 
 ### Update Panel
 

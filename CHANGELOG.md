@@ -10,6 +10,8 @@ versionnage suit [SemVer](https://semver.org/).
 - `EnumDictionary<TEnum, TValue>` : structure sérialisable associant une
   valeur à chaque membre d'une enum, éditable dans l'Inspector comme un
   dictionnaire (clé = valeur de l'enum).
+- Bouton "Open" à côté de tout champ référençant un `ScriptableObject` dans
+  l'Inspector, permettant de le sélectionner directement.
 
 ## [0.2.1] - 2026-07-28
 
