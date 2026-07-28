@@ -1,14 +1,66 @@
 # XTools
 
-Package Unity (UPM) contenant des extensions et outils personnalisés,
-pensé pour être réutilisé facilement d'un projet à l'autre.
+Custom Unity Editor extensions and tooling, packaged as a UPM package for
+easy reuse across projects.
 
-## Fonctionnalités actuelles
+## Table of Contents
+
+- [Installation](#installation)
+  - [Via Package Manager (Git URL)](#via-package-manager-git-url)
+  - [Via manifest.json](#via-manifestjson)
+  - [Pinning a version](#pinning-a-version)
+  - [Updating](#updating)
+- [Features](#features)
+  - [`[ReadOnly]`](#readonly)
+- [Package Structure](#package-structure)
+- [Contributing](#contributing)
+- [Versioning](#versioning)
+
+## Installation
+
+### Via Package Manager (Git URL)
+
+In Unity, open `Window > Package Manager`, click the `+` button in the
+top-left corner, select `Install package from git URL...`, and paste:
+
+```
+https://github.com/Xoletis/XTools.git
+```
+
+### Via manifest.json
+
+Alternatively, add the dependency directly to your project's
+`Packages/manifest.json`:
+
+```json
+{
+  "dependencies": {
+    "com.xoletis.xtools": "https://github.com/Xoletis/XTools.git"
+  }
+}
+```
+
+### Pinning a version
+
+To lock onto a specific release (recommended once the package is stable),
+append a Git tag to the URL:
+
+```
+https://github.com/Xoletis/XTools.git#0.1.0
+```
+
+### Updating
+
+Unity does not automatically check for updates on Git packages. To pull the
+latest version, use the "Update" button in the Package Manager, or remove
+and reinstall the dependency.
+
+## Features
 
 ### `[ReadOnly]`
 
-Attribut à appliquer sur un champ sérialisé pour l'afficher en lecture seule
-dans l'Inspector, sans le rendre modifiable :
+Apply this attribute to a serialized field to display it as read-only in
+the Inspector, without making it editable:
 
 ```csharp
 using UnityEngine;
@@ -21,7 +73,7 @@ public class Example : MonoBehaviour
 }
 ```
 
-## Structure
+## Package Structure
 
 ```
 com.xoletis.xtools/
@@ -36,55 +88,19 @@ com.xoletis.xtools/
     ReadOnlyDrawer.cs
 ```
 
-- `Runtime/` contient le code utilisable dans un build (ex. l'attribut
-  `ReadOnlyAttribute`), compilé dans l'assembly `Xoletis.EditorTools.Runtime`.
-- `Editor/` contient le code qui ne s'exécute qu'en mode éditeur (ex. les
-  `PropertyDrawer`), compilé dans l'assembly `Xoletis.EditorTools.Editor`
-  (qui référence l'assembly `Runtime`).
+- `Runtime/` contains build-safe code (e.g. `ReadOnlyAttribute`), compiled
+  into the `Xoletis.EditorTools.Runtime` assembly.
+- `Editor/` contains editor-only code (e.g. `PropertyDrawer` classes),
+  compiled into the `Xoletis.EditorTools.Editor` assembly, which references
+  `Runtime`.
 
-## Installation dans Unity depuis Git
+## Contributing
 
-Dans Unity, ouvrez `Window > Package Manager`, cliquez sur le `+` en haut à
-gauche, puis `Install package from git URL...` et collez :
+Add editor-only scripts (`[MenuItem]`, `CustomEditor`, `PropertyDrawer`,
+etc.) under `Editor/`, and reusable runtime code under `Runtime/`. Unity
+automatically compiles them into their respective assemblies.
 
-```
-https://github.com/Xoletis/XTools.git
-```
+## Versioning
 
-Vous pouvez aussi ajouter la dépendance directement dans le fichier
-`Packages/manifest.json` de votre projet :
-
-```json
-{
-  "dependencies": {
-    "com.xoletis.xtools": "https://github.com/Xoletis/XTools.git"
-  }
-}
-```
-
-### Épingler une version précise
-
-Pour figer une version (recommandé une fois le package stable), ajoutez un
-tag Git (ex. `#0.1.0`) à la fin de l'URL :
-
-```
-https://github.com/Xoletis/XTools.git#0.1.0
-```
-
-### Mettre à jour
-
-Unity ne re-vérifie pas automatiquement les mises à jour d'un package Git.
-Pour récupérer la dernière version, utilisez le bouton "Update" du Package
-Manager, ou supprimez puis réinstallez la dépendance.
-
-## Ajouter un outil
-
-Ajoutez vos scripts d'éditeur dans `Editor/` (ex. `[MenuItem]`,
-`CustomEditor`, `PropertyDrawer`) et le code réutilisable en build dans
-`Runtime/`. Unity les compile automatiquement dans les assemblies
-correspondantes.
-
-## Versionnage
-
-Incrémentez `version` dans `package.json` (SemVer) et documentez les
-changements dans `CHANGELOG.md` à chaque évolution notable.
+Bump `version` in `package.json` (SemVer) and document notable changes in
+`CHANGELOG.md`.
