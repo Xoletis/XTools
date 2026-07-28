@@ -12,6 +12,7 @@ easy reuse across projects.
   - [Updating](#updating)
 - [Features](#features)
   - [`[ReadOnly]`](#readonly)
+  - [`EnumDictionary<TEnum, TValue>`](#enumdictionarytenum-tvalue)
   - [Update Panel](#update-panel)
 - [Contributing](#contributing)
 - [Versioning](#versioning)
@@ -72,6 +73,47 @@ public class Example : MonoBehaviour
     public int computedValue;
 }
 ```
+
+### `EnumDictionary<TEnum, TValue>`
+
+A serializable, dictionary-like structure that lets you assign a value to
+each member of an enum, editable directly in the Inspector:
+
+```csharp
+using UnityEngine;
+using Xoletis.EditorTools;
+
+public enum Materiaux
+{
+    Fer,
+    Bois,
+    Pierre
+}
+
+public class Example : MonoBehaviour
+{
+    public EnumDictionary<Materiaux, float> weights;
+}
+```
+
+In the Inspector, `weights` appears as a foldout with one field per enum
+member (`Fer`, `Bois`, `Pierre`), each holding its own `float`. At runtime,
+read/write values with the enum as key:
+
+```csharp
+float fer = weights[Materiaux.Fer];
+weights[Materiaux.Bois] = 2.5f;
+
+foreach (var pair in weights)
+{
+    Debug.Log($"{pair.Key} -> {pair.Value}");
+}
+```
+
+> **Note:** values are matched to enum members by declaration order. Adding
+> or removing members at the end is safe; reordering or inserting a member
+> in the middle will shift the existing values, so double-check them in
+> the Inspector afterwards.
 
 ### Update Panel
 
