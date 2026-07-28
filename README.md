@@ -12,7 +12,6 @@ easy reuse across projects.
   - [Updating](#updating)
 - [Features](#features)
   - [`[ReadOnly]`](#readonly)
-- [Package Structure](#package-structure)
 - [Contributing](#contributing)
 - [Versioning](#versioning)
 
@@ -72,27 +71,6 @@ public class Example : MonoBehaviour
     public int computedValue;
 }
 ```
-
-## Package Structure
-
-```
-com.xoletis.xtools/
-  package.json
-  README.md
-  CHANGELOG.md
-  Runtime/
-    Xoletis.EditorTools.Runtime.asmdef
-    ReadOnlyAttribute.cs
-  Editor/
-    Xoletis.EditorTools.Editor.asmdef
-    ReadOnlyDrawer.cs
-```
-
-- `Runtime/` contains build-safe code (e.g. `ReadOnlyAttribute`), compiled
-  into the `Xoletis.EditorTools.Runtime` assembly.
-- `Editor/` contains editor-only code (e.g. `PropertyDrawer` classes),
-  compiled into the `Xoletis.EditorTools.Editor` assembly, which references
-  `Runtime`.
 
 ## Contributing
 
