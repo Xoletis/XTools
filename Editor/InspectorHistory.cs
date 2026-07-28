@@ -120,11 +120,15 @@ namespace Xoletis.EditorTools
                 return;
             }
 
+            // Pulls the row up against the header's last line (e.g. Tag/Layer for a
+            // GameObject) instead of leaving Unity's default gap between GUILayout blocks.
+            GUILayout.Space(-4);
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 using (new EditorGUI.DisabledScope(!CanGoBack()))
                 {
-                    if (GUILayout.Button(BackButtonContent, BackButtonStyle, GUILayout.Width(18), GUILayout.Height(18)))
+                    if (GUILayout.Button(BackButtonContent, BackButtonStyle, GUILayout.Width(18), GUILayout.Height(16)))
                     {
                         GoBack();
                     }
