@@ -14,6 +14,7 @@ easy reuse across projects.
   - [`[ReadOnly]`](#readonly)
   - [`EnumDictionary<TEnum, TValue>`](#enumdictionarytenum-tvalue)
   - [ScriptableObject "Open" Button](#scriptableobject-open-button)
+  - [Inspector History](#inspector-history)
   - [Update Panel](#update-panel)
 - [Contributing](#contributing)
 - [Versioning](#versioning)
@@ -138,6 +139,19 @@ This applies automatically to every `ScriptableObject` field across your
 project (no attribute required). If one of your `ScriptableObject`
 subtypes already has its own `[CustomPropertyDrawer]`, that more specific
 drawer still takes priority, so nothing breaks.
+
+### Inspector History
+
+Every Inspector now shows a small "◀ Back" button right below the object's
+header, letting you jump back to the previously inspected object/asset —
+similar to a browser's back button. It's disabled when there's nothing to
+go back to.
+
+> **Note:** Unity does not expose a public API to inject a control
+> directly into the Inspector window's own icon row (the lock/context-menu
+> icons). The button is added via the public `Editor.finishedDefaultHeaderGUI`
+> event instead, right under the header — this keeps the feature stable
+> across Unity versions instead of relying on internal/reflection hacks.
 
 ### Update Panel
 

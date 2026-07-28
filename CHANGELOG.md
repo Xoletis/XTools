@@ -12,6 +12,8 @@ versionnage suit [SemVer](https://semver.org/).
   dictionnaire (clé = valeur de l'enum).
 - Bouton "Open" à côté de tout champ référençant un `ScriptableObject` dans
   l'Inspector, permettant de le sélectionner directement.
+- Bouton "◀ Back" dans le header de l'Inspector, avec historique de
+  sélection, permettant de revenir à l'objet précédemment inspecté.
 
 ## [0.2.1] - 2026-07-28
 
