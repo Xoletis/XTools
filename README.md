@@ -13,7 +13,7 @@ easy reuse across projects.
 - [Features](#features)
   - [`[ReadOnly]`](#readonly)
   - [`EnumDictionary<TEnum, TValue>`](#enumdictionarytenum-tvalue)
-  - [ScriptableObject "Open" Button](#scriptableobject-open-button)
+  - [Open-in-Inspector Button](#open-in-inspector-button)
   - [Inspector History](#inspector-history)
   - [Update Panel](#update-panel)
 - [Contributing](#contributing)
@@ -117,10 +117,12 @@ foreach (var pair in weights)
 > in the middle will shift the existing values, so double-check them in
 > the Inspector afterwards.
 
-### ScriptableObject "Open" Button
+### Open-in-Inspector Button
 
-Any serialized field referencing a `ScriptableObject` (or a subclass)
-automatically gets an "Open" button next to it in the Inspector:
+Any serialized field referencing a `UnityEngine.Object` — a
+`ScriptableObject`, a `GameObject`, a `Component`, a `Material`, a
+`Texture`, or any other asset type — automatically gets a small eye-icon
+button next to it in the Inspector:
 
 ```csharp
 using UnityEngine;
@@ -128,17 +130,19 @@ using UnityEngine;
 public class Example : MonoBehaviour
 {
     public MyScriptableObject config;
+    public Material material;
+    public Transform target;
 }
 ```
 
-Clicking "Open" selects and pings the referenced asset, so its own
+Clicking the eye selects and pings the referenced object, so its own
 Inspector shows up immediately — no need to go hunt for it in the Project
-window. The button is disabled when the field is empty.
+window or Hierarchy. The button is disabled when the field is empty.
 
-This applies automatically to every `ScriptableObject` field across your
-project (no attribute required). If one of your `ScriptableObject`
-subtypes already has its own `[CustomPropertyDrawer]`, that more specific
-drawer still takes priority, so nothing breaks.
+This applies automatically to every object reference field across your
+project (no attribute required). If one of your types already has its own
+more specific `[CustomPropertyDrawer]`, that drawer still takes priority,
+so nothing breaks.
 
 ### Inspector History
 

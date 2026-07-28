@@ -10,8 +10,9 @@ versionnage suit [SemVer](https://semver.org/).
 - `EnumDictionary<TEnum, TValue>` : structure sérialisable associant une
   valeur à chaque membre d'une enum, éditable dans l'Inspector comme un
   dictionnaire (clé = valeur de l'enum).
-- Bouton "Open" à côté de tout champ référençant un `ScriptableObject` dans
-  l'Inspector, permettant de le sélectionner directement.
+- Bouton (icône œil) à côté de tout champ référençant un `UnityEngine.Object`
+  (asset, GameObject, Component, ScriptableObject...) dans l'Inspector,
+  permettant de le sélectionner directement.
 - Bouton "◀ Back" dans le header de l'Inspector, avec historique de
   sélection, permettant de revenir à l'objet précédemment inspecté.
 
