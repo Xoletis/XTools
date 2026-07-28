@@ -1,44 +1,88 @@
-# Xoletis Editor Tools
+# XTools
 
-Package Unity (UPM) contenant des extensions et outils d'éditeur personnalisés,
+Package Unity (UPM) contenant des extensions et outils personnalisés,
 pensé pour être réutilisé facilement d'un projet à l'autre.
+
+## Fonctionnalités actuelles
+
+### `[ReadOnly]`
+
+Attribut à appliquer sur un champ sérialisé pour l'afficher en lecture seule
+dans l'Inspector, sans le rendre modifiable :
+
+```csharp
+using UnityEngine;
+using Xoletis.EditorTools;
+
+public class Example : MonoBehaviour
+{
+    [ReadOnly]
+    public int computedValue;
+}
+```
 
 ## Structure
 
 ```
-com.xoletis.editor-tools/
+com.xoletis.xtools/
   package.json
   README.md
   CHANGELOG.md
+  Runtime/
+    Xoletis.EditorTools.Runtime.asmdef
+    ReadOnlyAttribute.cs
   Editor/
-    Xoletis.EditorTools.Editor.asmdef   <- assembly Editor-only
-    ...vos scripts d'éditeur ici...
+    Xoletis.EditorTools.Editor.asmdef
+    ReadOnlyDrawer.cs
 ```
 
-Tous les scripts placés dans `Editor/` sont automatiquement compilés dans une
-assembly dédiée qui ne s'exécute qu'en mode éditeur (jamais dans un build).
+- `Runtime/` contient le code utilisable dans un build (ex. l'attribut
+  `ReadOnlyAttribute`), compilé dans l'assembly `Xoletis.EditorTools.Runtime`.
+- `Editor/` contient le code qui ne s'exécute qu'en mode éditeur (ex. les
+  `PropertyDrawer`), compilé dans l'assembly `Xoletis.EditorTools.Editor`
+  (qui référence l'assembly `Runtime`).
+
+## Installation dans Unity depuis Git
+
+Dans Unity, ouvrez `Window > Package Manager`, cliquez sur le `+` en haut à
+gauche, puis `Install package from git URL...` et collez :
+
+```
+https://github.com/Xoletis/XTools.git
+```
+
+Vous pouvez aussi ajouter la dépendance directement dans le fichier
+`Packages/manifest.json` de votre projet :
+
+```json
+{
+  "dependencies": {
+    "com.xoletis.xtools": "https://github.com/Xoletis/XTools.git"
+  }
+}
+```
+
+### Épingler une version précise
+
+Pour figer une version (recommandé une fois le package stable), ajoutez un
+tag Git (ex. `#0.1.0`) à la fin de l'URL :
+
+```
+https://github.com/Xoletis/XTools.git#0.1.0
+```
+
+### Mettre à jour
+
+Unity ne re-vérifie pas automatiquement les mises à jour d'un package Git.
+Pour récupérer la dernière version, utilisez le bouton "Update" du Package
+Manager, ou supprimez puis réinstallez la dépendance.
 
 ## Ajouter un outil
 
-Ajoutez simplement vos fichiers `.cs` dans `Editor/` (sous-dossiers autorisés).
-Exemple : une fenêtre d'éditeur, un `[MenuItem]`, un `CustomEditor`,
-un `PropertyDrawer`, etc.
-
-## Exporter vers un autre projet
-
-Ce package est "embedded" : il vit directement dans le dossier `Packages/`
-du projet. Pour le réutiliser ailleurs, deux options :
-
-1. **Copier-coller** : copiez le dossier `Packages/com.xoletis.editor-tools`
-   tel quel dans le dossier `Packages/` de l'autre projet. Unity le détecte
-   automatiquement au prochain focus de l'éditeur.
-2. **Via un dépôt Git dédié** (recommandé si le package évolue souvent) :
-   - Initialisez ce dossier comme dépôt Git indépendant (ou déplacez-le dans
-     un repo séparé).
-   - Dans l'autre projet, ouvrez `Window > Package Manager > + > Install
-     package from git URL...` et collez l'URL du repo.
-   - Ou ajoutez une ligne dans `Packages/manifest.json` :
-     `"com.xoletis.editor-tools": "https://github.com/<user>/<repo>.git"`
+Ajoutez vos scripts d'éditeur dans `Editor/` (ex. `[MenuItem]`,
+`CustomEditor`, `PropertyDrawer`) et le code réutilisable en build dans
+`Runtime/`. Unity les compile automatiquement dans les assemblies
+correspondantes.
 
 ## Versionnage
 
