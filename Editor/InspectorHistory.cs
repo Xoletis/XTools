@@ -113,6 +113,16 @@ namespace Xoletis.EditorTools
         private static GUIContent BackButtonContent =>
             _backButtonContent ??= new GUIContent("◀", "Return to the previously inspected object");
 
+        private static GUIStyle _rowStyle;
+
+        private static GUIStyle RowStyle =>
+            // Negative top margin pulls the row up against the header's last line
+            // (e.g. Tag/Layer for a GameObject) instead of leaving Unity's default
+            // gap between GUILayout blocks. Using style margin (rather than a
+            // negative GUILayout.Space) keeps Layout/Repaint control IDs in sync,
+            // so the button stays clickable.
+            _rowStyle ??= new GUIStyle { margin = new RectOffset(0, 0, -4, 0) };
+
         private static void OnHeaderGUI(Editor editor)
         {
             if (editor.target != Selection.activeObject)
@@ -120,11 +130,7 @@ namespace Xoletis.EditorTools
                 return;
             }
 
-            // Pulls the row up against the header's last line (e.g. Tag/Layer for a
-            // GameObject) instead of leaving Unity's default gap between GUILayout blocks.
-            GUILayout.Space(-4);
-
-            using (new EditorGUILayout.HorizontalScope())
+            using (new EditorGUILayout.HorizontalScope(RowStyle))
             {
                 using (new EditorGUI.DisabledScope(!CanGoBack()))
                 {
