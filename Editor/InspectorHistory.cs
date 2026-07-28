@@ -86,6 +86,33 @@ namespace Xoletis.EditorTools
             Selection.activeObject = History[_index];
         }
 
+        private static GUIStyle _backButtonStyle;
+        private static GUIContent _backButtonContent;
+
+        private static GUIStyle BackButtonStyle
+        {
+            get
+            {
+                if (_backButtonStyle == null)
+                {
+                    // "IconButton" matches the flat, borderless look Unity uses for its
+                    // own small icon-only controls; fall back to a plain button if the
+                    // skin doesn't define it (e.g. after a Unity UI overhaul).
+                    var native = GUI.skin.FindStyle("IconButton");
+                    _backButtonStyle = new GUIStyle(native != null ? native : EditorStyles.miniButton)
+                    {
+                        fixedWidth = 0,
+                        fixedHeight = 0
+                    };
+                }
+
+                return _backButtonStyle;
+            }
+        }
+
+        private static GUIContent BackButtonContent =>
+            _backButtonContent ??= new GUIContent("◀", "Return to the previously inspected object");
+
         private static void OnHeaderGUI(Editor editor)
         {
             if (editor.target != Selection.activeObject)
@@ -97,8 +124,7 @@ namespace Xoletis.EditorTools
             {
                 using (new EditorGUI.DisabledScope(!CanGoBack()))
                 {
-                    if (GUILayout.Button(new GUIContent("◀ Back", "Return to the previously inspected object"),
-                            EditorStyles.miniButton, GUILayout.Width(60)))
+                    if (GUILayout.Button(BackButtonContent, BackButtonStyle, GUILayout.Width(18), GUILayout.Height(18)))
                     {
                         GoBack();
                     }
