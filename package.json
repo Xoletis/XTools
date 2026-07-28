@@ -1,6 +1,6 @@
 {
   "name": "com.xoletis.xtools",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "displayName": "XTools",
   "description": "Custom Unity Editor extensions and tooling, packaged for reuse across projects.",
   "unity": "6000.3",

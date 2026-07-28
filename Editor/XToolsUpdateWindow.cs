@@ -6,6 +6,7 @@ using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace Xoletis.EditorTools
 {

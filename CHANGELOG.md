@@ -4,6 +4,13 @@ Toutes les modifications notables de ce package sont documentées ici.
 Le format suit [Keep a Changelog](https://keepachangelog.com/) et le
 versionnage suit [SemVer](https://semver.org/).
 
+## [0.2.1] - 2026-07-28
+
+### Fixed
+- Erreur de compilation `CS0104` (référence ambiguë à `PackageInfo` entre
+  `UnityEditor.PackageManager.PackageInfo` et `UnityEditor.PackageInfo`)
+  dans `XToolsUpdateWindow`.
+
 ## [0.2.0] - 2026-07-28
 
 ### Added
