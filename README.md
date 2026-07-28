@@ -12,6 +12,7 @@ easy reuse across projects.
   - [Updating](#updating)
 - [Features](#features)
   - [`[ReadOnly]`](#readonly)
+  - [Update Panel](#update-panel)
 - [Contributing](#contributing)
 - [Versioning](#versioning)
 
@@ -71,6 +72,15 @@ public class Example : MonoBehaviour
     public int computedValue;
 }
 ```
+
+### Update Panel
+
+Open `Tools > XTools > Update` to manage the package from within Unity:
+
+- Shows the currently installed version.
+- Checks the GitHub repository's tags for the latest available version.
+- Lets you install the update in one click (via the Package Manager).
+- Displays the package's changelog.
 
 ## Contributing
 
