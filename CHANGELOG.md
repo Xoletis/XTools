@@ -4,6 +4,13 @@ Toutes les modifications notables de ce package sont documentées ici.
 Le format suit [Keep a Changelog](https://keepachangelog.com/) et le
 versionnage suit [SemVer](https://semver.org/).
 
+## [0.4.1]
+
+### Fixed
+- Ajout des fichiers `.meta` manquants pour `ConditionalFieldAttribute.cs`
+  et `ConditionalFieldDrawer.cs`, qui faisaient ignorer ces scripts par
+  Unity ("has no meta file... will be ignored").
+
 ## [0.4.0]
 
 ### Added
