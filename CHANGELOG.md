@@ -4,6 +4,14 @@ Toutes les modifications notables de ce package sont documentées ici.
 Le format suit [Keep a Changelog](https://keepachangelog.com/) et le
 versionnage suit [SemVer](https://semver.org/).
 
+## [0.4.0]
+
+### Added
+- `[ConditionalField]` : affiche/masque un champ de l'Inspector selon la
+  valeur d'un autre champ du même objet (bool, enum, int, float, string ou
+  référence d'objet), avec mise à jour automatique quand la variable liée
+  change.
+
 ## [0.3.0]
 
 ### Added
