@@ -12,6 +12,7 @@ easy reuse across projects.
   - [Updating](#updating)
 - [Features](#features)
   - [`[ReadOnly]`](#readonly)
+  - [`[ConditionalField]`](#conditionalfield)
   - [`EnumDictionary<TEnum, TValue>`](#enumdictionarytenum-tvalue)
   - [Open-in-Inspector Button](#open-in-inspector-button)
   - [Inspector History](#inspector-history)
@@ -75,6 +76,42 @@ public class Example : MonoBehaviour
     public int computedValue;
 }
 ```
+
+### `[ConditionalField]`
+
+Shows or hides a serialized field in the Inspector based on the value of
+another field, updating live as that field changes:
+
+```csharp
+using UnityEngine;
+using Xoletis.EditorTools;
+
+public class Example : MonoBehaviour
+{
+    public bool useCustomSpeed;
+
+    [ConditionalField(nameof(useCustomSpeed))]
+    public float customSpeed;
+
+    // Hide instead of show when the condition is true:
+    [ConditionalField(nameof(useCustomSpeed), inverse: true)]
+    public float defaultSpeed;
+
+    public enum Mode { Simple, Advanced }
+    public Mode mode;
+
+    // Show only when the referenced field equals a specific value
+    // (works with enums, ints, floats, strings and bools).
+    [ConditionalField(nameof(mode), Mode.Advanced)]
+    public float advancedSetting;
+}
+```
+
+The condition field must be a sibling of the annotated field (same object,
+or same element when both are inside a list/array). Bools, enums, ints,
+floats, strings and object references are all supported as conditions —
+for any type without an explicit compare value, "truthy" means non-zero /
+non-empty / non-null.
 
 ### `EnumDictionary<TEnum, TValue>`
 
