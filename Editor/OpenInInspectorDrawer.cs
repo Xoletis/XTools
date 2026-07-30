@@ -11,6 +11,7 @@ namespace Xoletis.EditorTools
 
         private static GUIContent _buttonContent;
         private static GUIContent _autoFillButtonContent;
+        private static GUIContent _addAndAssignButtonContent;
 
         private static GUIContent ButtonContent =>
             _buttonContent ??= new GUIContent(CreateEyeIcon(), "Select this object so its Inspector shows up");
@@ -18,6 +19,10 @@ namespace Xoletis.EditorTools
         private static GUIContent AutoFillButtonContent =>
             _autoFillButtonContent ??= new GUIContent(CreateAutoFillIcon(),
                 "Auto-assign the matching component found on this GameObject");
+
+        private static GUIContent AddAndAssignButtonContent =>
+            _addAndAssignButtonContent ??= new GUIContent(CreateAutoFillIcon(),
+                "Add a new matching component to this GameObject and assign it");
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -40,21 +45,37 @@ namespace Xoletis.EditorTools
             EditorGUI.PropertyField(fieldRect, property, label);
 
             bool isEmpty = property.objectReferenceValue == null;
-            Component autoFillComponent = isEmpty ? FindAutoFillComponent(property) : null;
-            bool showAutoFill = autoFillComponent != null;
-
-            using (new EditorGUI.DisabledScope(!showAutoFill && (isEmpty || property.hasMultipleDifferentValues)))
+            GameObject autoFillTarget = null;
+            System.Type autoFillType = null;
+            var autoFillAction = AutoFillAction.None;
+            if (isEmpty)
             {
-                if (GUI.Button(buttonRect, showAutoFill ? AutoFillButtonContent : ButtonContent, EditorStyles.miniButton))
+                autoFillAction = GetAutoFillAction(property, out autoFillTarget, out autoFillType);
+            }
+
+            using (new EditorGUI.DisabledScope(autoFillAction == AutoFillAction.None && (isEmpty || property.hasMultipleDifferentValues)))
+            {
+                var content = autoFillAction switch
                 {
-                    if (showAutoFill)
+                    AutoFillAction.AssignExisting => AutoFillButtonContent,
+                    AutoFillAction.AddAndAssign => AddAndAssignButtonContent,
+                    _ => ButtonContent
+                };
+
+                if (GUI.Button(buttonRect, content, EditorStyles.miniButton))
+                {
+                    switch (autoFillAction)
                     {
-                        property.objectReferenceValue = autoFillComponent;
-                    }
-                    else
-                    {
-                        Selection.activeObject = property.objectReferenceValue;
-                        EditorGUIUtility.PingObject(property.objectReferenceValue);
+                        case AutoFillAction.AssignExisting:
+                            property.objectReferenceValue = autoFillTarget.GetComponent(autoFillType);
+                            break;
+                        case AutoFillAction.AddAndAssign:
+                            property.objectReferenceValue = Undo.AddComponent(autoFillTarget, autoFillType);
+                            break;
+                        default:
+                            Selection.activeObject = property.objectReferenceValue;
+                            EditorGUIUtility.PingObject(property.objectReferenceValue);
+                            break;
                     }
                 }
             }
@@ -62,17 +83,28 @@ namespace Xoletis.EditorTools
             EditorGUI.EndProperty();
         }
 
-        // If the field is an empty Component (or interface) reference and the GameObject
-        // currently being inspected already carries a matching component, offer it up so
-        // the user doesn't have to drag it in by hand.
-        private Component FindAutoFillComponent(SerializedProperty property)
+        private enum AutoFillAction
         {
+            None,
+            AssignExisting,
+            AddAndAssign
+        }
+
+        // If the field is an empty Component (or interface) reference, offer to auto-fill it
+        // from the GameObject currently being inspected: reuse a matching component if one is
+        // already attached, otherwise add a new one (when the field type is a concrete
+        // Component) so the user doesn't have to drag it in by hand.
+        private AutoFillAction GetAutoFillAction(SerializedProperty property, out GameObject gameObject, out System.Type fieldType)
+        {
+            gameObject = null;
+            fieldType = null;
+
             if (property.hasMultipleDifferentValues || fieldInfo == null)
             {
-                return null;
+                return AutoFillAction.None;
             }
 
-            var gameObject = property.serializedObject.targetObject switch
+            gameObject = property.serializedObject.targetObject switch
             {
                 Component component => component.gameObject,
                 GameObject go => go,
@@ -81,16 +113,24 @@ namespace Xoletis.EditorTools
 
             if (gameObject == null)
             {
-                return null;
+                return AutoFillAction.None;
             }
 
-            var fieldType = GetElementType(fieldInfo.FieldType);
-            if (fieldType == null || (!typeof(Component).IsAssignableFrom(fieldType) && !fieldType.IsInterface))
+            fieldType = GetElementType(fieldInfo.FieldType);
+            bool isComponentType = fieldType != null && typeof(Component).IsAssignableFrom(fieldType);
+            bool isInterfaceType = fieldType is { IsInterface: true };
+
+            if (!isComponentType && !isInterfaceType)
             {
-                return null;
+                return AutoFillAction.None;
             }
 
-            return gameObject.GetComponent(fieldType);
+            if (gameObject.GetComponent(fieldType) != null)
+            {
+                return AutoFillAction.AssignExisting;
+            }
+
+            return isComponentType && !fieldType.IsAbstract ? AutoFillAction.AddAndAssign : AutoFillAction.None;
         }
 
         private static System.Type GetElementType(System.Type type)
