@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEditor;
 using UnityEngine;
 
@@ -95,14 +93,14 @@ namespace Xoletis.EditorTools
             return gameObject.GetComponent(fieldType);
         }
 
-        private static Type GetElementType(Type type)
+        private static System.Type GetElementType(System.Type type)
         {
             if (type.IsArray)
             {
                 return type.GetElementType();
             }
 
-            if (type.IsGenericType && typeof(IList).IsAssignableFrom(type))
+            if (type.IsGenericType && typeof(System.Collections.IList).IsAssignableFrom(type))
             {
                 return type.GetGenericArguments()[0];
             }
