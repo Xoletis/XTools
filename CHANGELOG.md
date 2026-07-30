@@ -4,6 +4,21 @@ Toutes les modifications notables de ce package sont documentées ici.
 Le format suit [Keep a Changelog](https://keepachangelog.com/) et le
 versionnage suit [SemVer](https://semver.org/).
 
+## [0.5.0]
+
+### Added
+- `[Tag]` : affiche un champ `string` sous forme de liste déroulante des
+  Tags définis dans le projet.
+- `[Layer]` : affiche un champ `int` sous forme de liste déroulante des
+  Layers définis dans le projet.
+- `[SpriteLayer]` : affiche un champ `int` sous forme de liste déroulante
+  des Sorting Layers définis dans le projet (stocke l'ID du layer, comme
+  `SpriteRenderer.sortingLayerID`).
+- Bouton du champ objet vide, quand le GameObject inspecté possède déjà un
+  composant du type attendu : l'assigne automatiquement en un clic.
+- Si le GameObject inspecté ne possède pas encore ce composant, le même
+  bouton l'ajoute puis l'assigne automatiquement.
+
 ## [0.4.1]
 
 ### Fixed
