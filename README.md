@@ -12,6 +12,9 @@ easy reuse across projects.
   - [Updating](#updating)
 - [Features](#features)
   - [`[ReadOnly]`](#readonly)
+  - [`[Tag]`](#tag)
+  - [`[Layer]`](#layer)
+  - [`[SpriteLayer]`](#spritelayer)
   - [`[ConditionalField]`](#conditionalfield)
   - [`EnumDictionary<TEnum, TValue>`](#enumdictionarytenum-tvalue)
   - [Open-in-Inspector Button](#open-in-inspector-button)
@@ -74,6 +77,55 @@ public class Example : MonoBehaviour
 {
     [ReadOnly]
     public int computedValue;
+}
+```
+
+### `[Tag]`
+
+Displays a `string` field as a dropdown of the project's defined Tags,
+instead of a free-text field:
+
+```csharp
+using UnityEngine;
+using Xoletis.EditorTools;
+
+public class Example : MonoBehaviour
+{
+    [Tag]
+    public string targetTag;
+}
+```
+
+### `[Layer]`
+
+Displays an `int` field as a dropdown of the project's defined Layers
+(same widget Unity uses for `GameObject.layer`):
+
+```csharp
+using UnityEngine;
+using Xoletis.EditorTools;
+
+public class Example : MonoBehaviour
+{
+    [Layer]
+    public int targetLayer;
+}
+```
+
+### `[SpriteLayer]`
+
+Displays an `int` field as a dropdown of the project's defined Sorting
+Layers (same list as `SpriteRenderer.sortingLayerID`), storing the
+selected layer's ID:
+
+```csharp
+using UnityEngine;
+using Xoletis.EditorTools;
+
+public class Example : MonoBehaviour
+{
+    [SpriteLayer]
+    public int targetSortingLayer;
 }
 ```
 
